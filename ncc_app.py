@@ -182,8 +182,8 @@ try:
     data_check["Predict"] = d
     p = pd.DataFrame(proba, columns = ['proba_0','proba_1'])
     p = p * 100
-    data_check["Non-Pseudo Clash Probability"] = p.proba_0
-    data_check["Pseudo Clash Probability"] = p.proba_1
+    data_check["Non-Pseudo Clash Certainity"] = p.proba_0
+    data_check["Pseudo Clash Certainity"] = p.proba_1
 
     st.title("Predicted data with out put column as prediction")
     st.text("0 means open and 1 means resolved for prediction column")
@@ -191,7 +191,7 @@ try:
 
     #Download df dataframe
     if st.button('Download Dataframe as CSV'):
-        tmp_download_link = download_link(data, 'YOUR_DF.csv', 'Click here to download your data!')
+        tmp_download_link = download_link(data_check, 'YOUR_DF.csv', 'Click here to download your data!')
         st.markdown(tmp_download_link, unsafe_allow_html=True)
 
 
