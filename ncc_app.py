@@ -3,6 +3,9 @@ import streamlit as st
 import pandas as pd
 import base64
 import pickle
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 #config
 st.set_option('deprecation.showPyplotGlobalUse', False)
 #Application title and info
@@ -198,6 +201,33 @@ try:
     # st.subheader("ROC Curve") 
     # plot_roc_curve(clf, x_test, y_test)
     # st.pyplot()
+    a, b = st.beta_columns(2)
+
+
+    data_check['component1'].value_counts().head().plot(kind='barh')
+    plt.ylabel("Component 1")
+    plt.xlabel("Count")
+    plt.title("Top 5 Component 1 with clashes")
+    a.pyplot()
+
+    data_check['component2'].value_counts().head().plot(kind='barh')
+    plt.ylabel("Component 2")
+    plt.xlabel("Count")
+    plt.title("Top 5 Component 2 with clashes")
+    b.pyplot()
+    c, d = st.beta_columns(2)
+
+    data_check['Location'].value_counts().head().plot(kind='barh')
+    plt.ylabel("Location")
+    plt.xlabel("Count")
+    plt.title("Top 5 Location with clashes")
+    c.pyplot()
+    
+    sns.countplot(x="Predict", data=data_check)
+    plt.xlabel("Type of clash(0 - Non-Pseudo Clash & 1 - Pseudo Clash)")
+    plt.ylabel("Count")
+    plt.title("Count of Pseudo/Non-Pseudo Clashes")    
+    d.pyplot()
 
 except Exception as e:
     print(e)
