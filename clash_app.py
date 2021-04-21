@@ -207,7 +207,7 @@ try:
     data_encode=data_encode.drop(["GUID"],axis=1)
 
     df = data_prep(df)
-    st.title("Normalized Data which is ready for the model") 
+    st.title("Data which is ready for the model") 
     st.write(data_check)
     #classifiers
     classifier_name = st.sidebar.selectbox("Select Classifier",("Random Forest Classifier", "Gradient Boosting Classifier","Decision Tree Classifier","Logistic Regression","Sequential"))
