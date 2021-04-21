@@ -25,7 +25,7 @@ def data_prep(df1):
         if "Issue Description" in df1:
             df = []
             df = pd.DataFrame(df)
-        
+            
             #split the data value columns in issue description
             new = df1["Issue Description"].str.split(":", n = 1, expand = True) 
             df1["required"]= new[1]
@@ -79,6 +79,22 @@ def data_prep(df1):
             new = df1["v"].str.split(",", n = 1, expand = True) 
             df1['vol'] = new[1]
             
+            #to seperate the component 1 and discipline 1
+            new = df1["component1"].str.split("(", n = 1, expand = True) 
+            df1['empty1'] = new[0]
+            df1['dis1'] = new[1]
+            new = df1["dis1"].str.split(")", n = 1, expand = True) 
+            df1['discipline1'] = new[0]
+            df1['component1'] = new[1]
+            
+            #to seperate the component 2 and discipline 2
+            new = df1["comp2"].str.split("(", n = 1, expand = True) 
+            df1['empty'] = new[0]
+            df1['dis'] = new[1]
+            new = df1["dis"].str.split(")", n = 1, expand = True) 
+            df1['discipline2'] = new[0]
+            df1['component2'] = new[1]
+            
             #Keep only required column in the new dataframe as df and convert the column datatype to numeric
             if "x_axis" in df1:
                 df["x_axis"] = pd.to_numeric(df1["x_axis"])
@@ -94,20 +110,31 @@ def data_prep(df1):
                                     df["distance1"] = pd.to_numeric(df1["distance"])
             #feature engineering for ID column 
             df1["Dupli"] = df1.ID.duplicated(keep=False)
+            df["Status_cat"] = df1.Status.astype('category').cat.codes
             #Encode the values that are not numbers
             #categorical column is encoded using cat.code function.
-            df["Status_cat"] = df1.Status.astype('category').cat.codes
-            df["Location_cat"] = df1.Location.astype('category').cat.codes
-            df["component2_cat"] = df1.comp2.astype('category').cat.codes
-            df["component1_cat"] = df1.component1.astype('category').cat.codes
-            df["dup_cat"] = df1.Dupli.astype('category').cat.codes
+            df["Location"] = df1.Location
+            df["component2"] = df1.component2
+            df["component1"] = df1.component1
+            df["discipline1"] = df1.discipline2
+            df["discipline2"] = df1.discipline2
+            df["Clash<1"] = df1.Dupli.astype('category').cat.codes
             df["ID"] = df1["ID"]
-            df["Discipline"] = df1["Discipline"]
-            df['Phase'] = 1
+            df["phase"] = 1
+            df["GUID"]=df1["GUID"]
             df = df.dropna(axis = 0, how ='any')
             return df
     except Exception as e:
         print(e)
+
+#Function to encode 
+def cat_encode(df):
+    df["Location"] = df.Location.astype('category').cat.codes
+    df["component2"] = df.component2.astype('category').cat.codes
+    df["component1"] = df.component1.astype('category').cat.codes
+    df["discipline1"] = df.discipline2.astype('category').cat.codes
+    df["discipline2"] = df.discipline2.astype('category').cat.codes
+    return df
 #a function to display all the content in the side bar
 def classifier(classifier_name):
     params =dict()
@@ -160,6 +187,7 @@ uploaded_file = st.sidebar.file_uploader(label="",type=['csv','xlsx'])
 class_names = ['Pseudo Clash', 'Non-Pseudo Clash']
 #condition to upload a file and read the file
 global df
+df = pd.read_excel("data.xlsx",engine='openpyxl')
 if uploaded_file is not None:
     print(uploaded_file)
     try:
@@ -173,14 +201,19 @@ try:
     st.title("Original File contents") 
     st.write(df)
     #call the data prepration function
+    data_preprocessed = data_prep(df)
+    data_check = data_preprocessed.copy()
+    data_encode = cat_encode(data_preprocessed)
+    data_encode=data_encode.drop(["GUID"],axis=1)
+
     df = data_prep(df)
     st.title("Normalized Data which is ready for the model") 
-    st.write(df)
+    st.write(data_check)
     #classifiers
     classifier_name = st.sidebar.selectbox("Select Classifier",("Random Forest Classifier", "Gradient Boosting Classifier","Decision Tree Classifier","Logistic Regression","Sequential"))
     #split x and y data
-    x=df.drop(["Status_cat"],axis=1)
-    y=df["Status_cat"]
+    x=data_encode.drop(["Status_cat"],axis=1)
+    y=data_encode["Status_cat"]
     #split data, fit to classifier
     x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3,random_state=123)
     if classifier_name != "Sequential":

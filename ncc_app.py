@@ -114,9 +114,9 @@ def prepare_data(df1,phase):
             df["ID"] = df1["ID"]
             #Adding phase feature
             if phase == "Tender":
-                df["phase"] = 0
-            elif phase == "Design":
                 df["phase"] = 1
+            elif phase == "Design":
+                df["phase"] = 0
             elif phase == "Production":
                 df["phase"] = 2
             df["GUID"]=df1["GUID"]
