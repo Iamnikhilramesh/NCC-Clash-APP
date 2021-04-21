@@ -4,3 +4,4 @@ seaborn
 matplotlib
 keras
 numpy
+TensorFlow
