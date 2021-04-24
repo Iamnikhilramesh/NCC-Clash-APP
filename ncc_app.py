@@ -166,8 +166,8 @@ if uploaded_file is not None:
 
 #Display the content of the file
 try:
-    st.title("Input Data for prediction") 
-    st.write(df)
+    # st.title("Input Data for prediction") 
+    # st.write(df)
     # Load the model from the file 
     #Load Model
     filename='Model.sav'
