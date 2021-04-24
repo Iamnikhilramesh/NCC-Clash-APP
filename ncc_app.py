@@ -182,15 +182,18 @@ try:
     # # Making predictions 
     d = clf.predict(data_encode)
     proba = clf.predict_proba(data_encode)
-    data_check["Predict"] = d
+    data_check["Predicted"] = d
+    # 0 means open and 1 means resolved for status column
+    data_check.loc[(data_check.Predicted == 0),'Predicted']='Open'
+    data_check.loc[(data_check.Predicted == 1),'Predicted']='Resolved'
     p = pd.DataFrame(proba, columns = ['proba_0','proba_1'])
     p = p * 100
-    data_check["Non-Pseudo Clash Certainity"] = p.proba_0
-    data_check["Pseudo Clash Certainity"] = p.proba_1
+    data_check["Open Clash Probabiity"] = p.proba_0
+    data_check["Resolved Clash Probabiity"] = p.proba_1
 
     st.title("Predicted data with out put column as prediction")
     st.text("0 means open and 1 means resolved for prediction column")
-    st.write(data_check)
+    st.write(data_check.drop(['x_axis','y_axis','z_axis','vol','distance1','distance2','phase','Clash<1'],axis=1))
 
     #Download df dataframe
     if st.button('Download Dataframe as CSV'):
@@ -223,7 +226,7 @@ try:
     plt.title("Top 5 Location with clashes")
     c.pyplot()
     
-    sns.countplot(x="Predict", data=data_check)
+    sns.countplot(x="Predicted", data=data_check)
     plt.xlabel("Type of clash(0 - Non-Pseudo Clash & 1 - Pseudo Clash)")
     plt.ylabel("Count")
     plt.title("Count of Pseudo/Non-Pseudo Clashes")    
