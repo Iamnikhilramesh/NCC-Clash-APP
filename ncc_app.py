@@ -9,8 +9,7 @@ import seaborn as sns
 #config
 st.set_option('deprecation.showPyplotGlobalUse', False)
 #Application title and info
-st.title("Utilizing Machine Learning to Detect Non-pseudo/pseudo Design Conflicts in BIM Models")
-st.write("...")
+st.header("Utilizing Machine Learning to Detect Non-pseudo/pseudo Design Conflicts in BIM Models")
 
 
 #definations
@@ -191,8 +190,8 @@ try:
     data_check["Open Clash Probabiity"] = p.proba_0
     data_check["Resolved Clash Probabiity"] = p.proba_1
 
-    st.title("Predicted data with out put column as prediction")
-    st.text("0 means open and 1 means resolved for prediction column")
+    st.title("Predicted data")
+    # st.text("0 means open and 1 means resolved for prediction column")
     st.write(data_check.drop(['x_axis','y_axis','z_axis','vol','distance1','distance2','phase','Clash<1'],axis=1))
 
     #Download df dataframe
