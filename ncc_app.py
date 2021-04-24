@@ -226,7 +226,7 @@ try:
     c.pyplot()
     
     sns.countplot(x="Predicted", data=data_check)
-    plt.xlabel("Type of clash(0 - Non-Pseudo Clash & 1 - Pseudo Clash)")
+    plt.xlabel("Type of clash(Open - Non-Pseudo Clash & Resolved - Pseudo Clash)")
     plt.ylabel("Count")
     plt.title("Count of Pseudo/Non-Pseudo Clashes")    
     d.pyplot()
