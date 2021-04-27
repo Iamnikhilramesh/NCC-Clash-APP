@@ -187,7 +187,7 @@ uploaded_file = st.sidebar.file_uploader(label="",type=['csv','xlsx'])
 class_names = ['Pseudo Clash', 'Non-Pseudo Clash']
 #condition to upload a file and read the file
 global df
-df = pd.read_excel("data.xlsx",engine='openpyxl')
+df = pd.read_excel("ncc_data.xlsx",engine='openpyxl')
 if uploaded_file is not None:
     print(uploaded_file)
     try:
