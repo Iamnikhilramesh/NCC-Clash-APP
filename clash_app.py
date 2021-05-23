@@ -210,58 +210,28 @@ try:
     st.title("Data which is ready for the model") 
     st.write(data_check)
     #classifiers
-    classifier_name = st.sidebar.selectbox("Select Classifier",("Random Forest Classifier", "Gradient Boosting Classifier","Decision Tree Classifier","Logistic Regression","Sequential"))
+    classifier_name = st.sidebar.selectbox("Select Classifier",("Random Forest Classifier", "Gradient Boosting Classifier","Decision Tree Classifier","Logistic Regression"))
     #split x and y data
     x=data_encode.drop(["Status_cat"],axis=1)
     y=data_encode["Status_cat"]
     #split data, fit to classifier
     x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3,random_state=123)
-    if classifier_name != "Sequential":
-        params = classifier(classifier_name)
-        clf = get_classifier(classifier_name,params)
-        
-        clf.fit(x_train,y_train)
-        y_predict = clf.predict(x_test)
-        st.subheader("Confusion Matrix") 
-        plot_confusion_matrix(clf, x_test, y_test, display_labels=class_names)
-        st.pyplot()
+    params = classifier(classifier_name)
+    clf = get_classifier(classifier_name,params)
+    
+    clf.fit(x_train,y_train)
+    y_predict = clf.predict(x_test)
+    st.subheader("Confusion Matrix") 
+    plot_confusion_matrix(clf, x_test, y_test, display_labels=class_names)
+    st.pyplot()
 
-        st.subheader("ROC Curve") 
-        plot_roc_curve(clf, x_test, y_test)
-        st.pyplot()
+    st.subheader("ROC Curve") 
+    plot_roc_curve(clf, x_test, y_test)
+    st.pyplot()
 
-        st.subheader("Precision-Recall Curve")
-        plot_precision_recall_curve(clf, x_test, y_test)
-        st.pyplot()
-        
-
-    elif classifier_name == "Sequential":
-        # set random seed for reproducibility
-        seed(42)
-
-        model = Sequential()
-        lyrs = [8]
-        # create first hidden layer
-        model.add(Dense(lyrs[0], input_dim=x_train.shape[1], activation='linear'))
-        lyrs = [8]
-        # create additional hidden layers
-        for i in range(1,len(lyrs)):
-            model.add(Dense(lyrs[i], activation='linear'))
-
-        # add dropout, default is none
-        model.add(Dropout(0.0))
-
-        # create output layer
-        model.add(Dense(1, activation='sigmoid'))  # output layer
-
-        #Compile
-        model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy'])
-        # train model on full train set, with 80/20 CV split
-        model.fit(x_train, y_train, epochs=1000, batch_size=32, validation_split=0.2, verbose=0)
-
-        
-        y_predict = model.predict_classes(x_test)
-        classifier_name = "Sequential"
+    st.subheader("Precision-Recall Curve")
+    plot_precision_recall_curve(clf, x_test, y_test)
+    st.pyplot()
 
 
     #evaluation metrics
