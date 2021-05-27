@@ -9,9 +9,6 @@ from sklearn.metrics import accuracy_score
 import seaborn as sns
 import matplotlib.pyplot as plt
 import base64
-from keras.wrappers.scikit_learn import KerasClassifier
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout
 from sklearn.metrics import precision_score,recall_score,f1_score
 from numpy.random import seed
 from sklearn.metrics import plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
