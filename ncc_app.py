@@ -233,7 +233,6 @@ try:
 
 except Exception as e:
     print(e)
-    st.write("Please upload a file to display the contents")
 
 
 
