@@ -205,7 +205,7 @@ try:
 
     df = data_prep(df)
     st.title("Data which is ready for the model") 
-    st.write(data_check)
+    st.write(data_check.drop(['status_cat'],axis=1))
     #classifiers
     classifier_name = st.sidebar.selectbox("Select Classifier",("Random Forest Classifier", "Gradient Boosting Classifier","Decision Tree Classifier","Logistic Regression"))
     #split x and y data
